@@ -44,9 +44,9 @@ pip install torch torchvision numpy pandas matplotlib tqdm pillow
 ```bash
 outputs/
 └── run_name/
-    ├── model_best.pth        # ⭐ 最优模型（用于预测）
+    ├── model_best.pth       
     ├── model_last.pth
-    ├── model_summary.json    # 记录训练结果
+    ├── model_summary.json   
     ├── loss_curve.png
     └── acc_curve.png
 ```
