@@ -1,0 +1,43 @@
+# Dataset
+datasets/
+data/
+dogs-vs-cats/
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.webp
+
+# Models
+*.pth
+*.pt
+*.ckpt
+
+# Logs
+runs/
+logs/
+outputs/
+checkpoints/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Env
+env/
+venv/
+.venv/
+
+# VSCode
+.vscode/
+
+# Mac
+.DS_Store
+
+# Archives
+*.zip
+*.tar
+*.gz
