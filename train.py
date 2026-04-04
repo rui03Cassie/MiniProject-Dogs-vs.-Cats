@@ -46,7 +46,7 @@ def train_one_epoch(model, loader, loss_fn, optimizer, device, use_amp=False):
     amp_enabled = use_amp and device.type == "cuda"
     scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled)
 
-    process = tqdm(loader, desc="Train", leave=False)
+    process = tqdm(loader, desc="Train", leave=False, mininterval=0.5)
     for images, labels in process:
         images = images.to(device)
         labels = labels.to(device)
@@ -160,7 +160,7 @@ def main():
         run_name = f"{args.model}_lr{args.lr}_bs{args.batch_size}_aug{args.augmentation}"
     else:
         run_name = args.run_name
-    save_dir = Path(args.output_dir) / run_name
+    save_dir = os.path.join(args.output_dir, run_name)
     save_dir.mkdir(parents=True, exist_ok=True)
 
     config = DatasetConfig(
@@ -241,8 +241,6 @@ def main():
             break
 
     total_time = time.time() - start_time
-    model.load_state_dict(best_state)
-    torch.save(model.state_dict(), save_dir / "model_final.pth")
     epochs = list(range(1, len(history["train_loss"]) + 1))
 
     # draw
@@ -271,24 +269,20 @@ def main():
     plt.close()
 
     if len(history["val_acc"]) > 0:
-        final_val_acc = history["val_acc"][-1]
+        lastEpoch_val_acc = history["val_acc"][-1]
     else:
-        final_val_acc = None
+        lastEpoch_val_acc = None
 
     summary = {
         "best_epoch": best_epoch, 
         "best_val_acc": best_val_acc, 
-        "final_val_acc": final_val_acc,
-        "epochs_ran": len(history["train_loss"]), 
+        "lastEpoch_val_acc": lastEpoch_val_acc,
+        "epochs_nums": len(history["train_loss"]), 
         "total_time_sec": total_time, 
         "device": str(device), 
         "class_to_idx": class_to_idx, 
         "config": vars(args),
         }
-
-    history_path = save_dir / "history.json"
-    with open(history_path, "w", encoding="utf-8") as f:
-        json.dump(history, f, indent=2)
 
     summary_path = save_dir / "summary.json"
     with open(summary_path, "w", encoding="utf-8") as f:

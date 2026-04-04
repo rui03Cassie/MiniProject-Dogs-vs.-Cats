@@ -73,8 +73,8 @@ def main():
     )
 
     train_loader, val_loader, test_loader, class_to_idx = build_dataloaders(config)
-    print("class_to_idx=", class_to_idx)
     model = build_model(args.model,2, args.dropout, args.pretrained, args.train_backbone, args.unfreeze_layer4).to(device)
+    print("class_to_idx=", class_to_idx)
 
     checkpoint_path = Path(args.checkpoint)
     if not checkpoint_path.exists():
