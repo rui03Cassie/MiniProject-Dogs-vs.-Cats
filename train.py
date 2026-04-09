@@ -160,7 +160,7 @@ def main():
         run_name = f"{args.model}_lr{args.lr}_bs{args.batch_size}_aug{args.augmentation}"
     else:
         run_name = args.run_name
-    save_dir = os.path.join(args.output_dir, run_name)
+    save_dir = Path(args.output_dir) / run_name
     save_dir.mkdir(parents=True, exist_ok=True)
 
     config = DatasetConfig(

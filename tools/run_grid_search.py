@@ -153,6 +153,7 @@ def main():
     parser.add_argument("--optimizers", nargs="*", default=["adamw"])
     parser.add_argument("--schedulers", nargs="*", default=["plateau"])
     parser.add_argument("--epochs_list", nargs="*", type=int, default=[10, 15])
+    parser.add_argument("--early_stop_patience", type=int, default=5)
 
     parser.add_argument("--train_subset", type=int, default=None)
     parser.add_argument("--val_subset", type=int, default=None)
@@ -217,6 +218,7 @@ def main():
                 "--scheduler", scheduler,
                 "--num_workers", str(args.num_workers),
                 "--seed", str(args.seed),
+                "--early_stop_patience", str(args.early_stop_patience),
                 "--output_dir", str(output_dir),
                 "--run_name", run_name,
             ]
