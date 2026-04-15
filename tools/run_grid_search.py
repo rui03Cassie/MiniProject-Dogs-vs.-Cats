@@ -16,6 +16,9 @@ MODEL_CONFIGS = {
     "resnet": {
         "extra_args": ["--pretrained", "--unfreeze_layer4"],
     },
+    "resnet34": {
+        "extra_args": ["--pretrained", "--unfreeze_layer4"],
+    },
 }
 
 

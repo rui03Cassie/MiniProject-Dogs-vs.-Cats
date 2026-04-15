@@ -13,38 +13,38 @@ import matplotlib.pyplot as plt
 import json
 from tqdm import tqdm
 
-
 class EarlyStopping:
-    def __init__(self, patience=5, mode="max"):
+    def __init__(self, patience=5, mode="max", min_delta=0.001):
         self.patience = patience
         self.mode = mode
         self.best = None
         self.bad_epochs = 0
+        self.min_delta = min_delta
 
     def step(self, value):
         if self.best is None:
             self.best = value
             return False
-        
+
         if self.mode == "max":
-            updated = value > self.best
+            updated = value > self.best + self.min_delta
         else:
-            updated = value < self.best
+            updated = value < self.best - self.min_delta
 
         if updated:
             self.best = value
             self.bad_epochs = 0
         else:
             self.bad_epochs += 1
-        return self.bad_epochs >= self.patience
 
+        return self.bad_epochs >= self.patience
 
 def train_one_epoch(model, loader, loss_fn, optimizer, device, use_amp=False):
     model.train()
     loss_meter = Average()
     acc_meter = Average()
     amp_enabled = use_amp and device.type == "cuda"
-    scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled)
+    scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled)
 
     process = tqdm(loader, desc="Train", leave=False, mininterval=0.5)
     for images, labels in process:
@@ -52,7 +52,7 @@ def train_one_epoch(model, loader, loss_fn, optimizer, device, use_amp=False):
         labels = labels.to(device)
         optimizer.zero_grad()
 
-        with torch.cuda.amp.autocast(enabled=amp_enabled):
+        with torch.amp.autocast("cuda", enabled=amp_enabled):
             outputs = model(images)
             loss = loss_fn(outputs, labels)  # forward
 
@@ -130,6 +130,7 @@ def main():
     parser.add_argument("--optimizer", type=str, default="adam")
     parser.add_argument("--scheduler", type=str, default="plateau")
     parser.add_argument("--early_stop_patience", type=int, default=5)
+    parser.add_argument("--early_stop_min_delta", type=float, default=0.001)
     parser.add_argument("--use_amp", action="store_true")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--output_dir", type=str, default="outputs")
@@ -179,7 +180,7 @@ def main():
     print("train_batches=", len(train_loader), "val_batches=", len(val_loader))
 
     model = build_model(args.model, 2, args.dropout, args.pretrained, args.train_backbone, args.unfreeze_layer4).to(device)
-    loss_fn = nn.CrossEntropyLoss()
+    loss_fn = nn.CrossEntropyLoss(label_smoothing=0.05)
     params = [param for param in model.parameters() if param.requires_grad]
     # 优化器
     if args.optimizer.lower() == "adam":
@@ -208,9 +209,11 @@ def main():
     best_val_acc = -1
     best_epoch = -1
     best_state = copy.deepcopy(model.state_dict())
-    stopper = EarlyStopping(patience=args.early_stop_patience, mode="max")
+    stopper = EarlyStopping(patience=args.early_stop_patience, mode="min", min_delta=args.early_stop_min_delta)
     start_time = time.time() # 记录时间
     # 开始训练
+    best_val_acc = -1.0
+    best_epoch = -1
     for epoch in range(1, args.epochs + 1):
         print(f"\nEpoch [{epoch}/{args.epochs}]")
         train_loss, train_acc = train_one_epoch(model, train_loader, loss_fn, optimizer, device, args.use_amp)
@@ -221,28 +224,32 @@ def main():
                 scheduler.step(val_loss)
             else:
                 scheduler.step()
+
         current_lr = optimizer.param_groups[0]["lr"]
+
         history["train_loss"].append(train_loss)
         history["train_acc"].append(train_acc)
         history["val_loss"].append(val_loss)
         history["val_acc"].append(val_acc)
         history["lr"].append(current_lr)
+
         print(f"train_loss={train_loss:.4f}, train_acc={train_acc:.4f}, val_loss={val_loss:.4f}, val_acc={val_acc:.4f}, lr={current_lr:.6f}")
 
-        if val_acc > best_val_acc:
+        if val_acc > best_val_acc + 1e-4:
             best_val_acc = val_acc
             best_epoch = epoch
             best_state = copy.deepcopy(model.state_dict())
             torch.save(best_state, save_dir / "model_best.pth")
             print(f"Saved best model to: {save_dir / 'model_best.pth'}")
 
-        if stopper.step(val_acc):
+        if stopper.step(val_loss):
             print(f"Early stopping triggered at epoch {epoch}.")
             break
 
     total_time = time.time() - start_time
     epochs = list(range(1, len(history["train_loss"]) + 1))
 
+    tag = f"lr-{args.lr}_aug-{args.augmentation}"
     # draw
     plt.figure(figsize=(8, 5))
     plt.plot(epochs, history["train_loss"], marker="o", label="train_loss")
@@ -253,7 +260,7 @@ def main():
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.3)
     plt.tight_layout()
-    plt.savefig(save_dir / "loss_curve.png", dpi=200)
+    plt.savefig(save_dir / f"loss_curve_{tag}.png", dpi=200)
     plt.close()
 
     plt.figure(figsize=(8, 5))
@@ -265,7 +272,7 @@ def main():
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.3)
     plt.tight_layout()
-    plt.savefig(save_dir / "acc_curve.png", dpi=200)
+    plt.savefig(save_dir / f"acc_curve_{tag}.png", dpi=200)
     plt.close()
 
     if len(history["val_acc"]) > 0:
