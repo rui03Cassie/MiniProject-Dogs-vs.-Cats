@@ -35,7 +35,7 @@ def main():
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--num_workers", type=int, default=4)
     parser.add_argument("--normalize_mode", type=str, default="imagenet")
-    parser.add_argument("--dropout", type=float, default=0.3)
+    parser.add_argument("--dropout", type=float, default=0.2)
     parser.add_argument("--pretrained", action="store_true")
     parser.add_argument("--train_backbone", action="store_true")
     parser.add_argument("--unfreeze_layer4", action="store_true")

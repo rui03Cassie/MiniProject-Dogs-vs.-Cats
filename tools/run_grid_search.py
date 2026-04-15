@@ -58,6 +58,7 @@ def evaluate_one_run(
     model: str,
     batch_size: int,
     num_workers: int,
+    dropout: float,
 ):
     checkpoint = run_dir / "model_best.pth"
     if not checkpoint.exists():
@@ -71,6 +72,7 @@ def evaluate_one_run(
         "--model", model,
         "--checkpoint", str(checkpoint),
         "--batch_size", str(batch_size),
+        "--dropout", str(dropout),
         "--num_workers", str(num_workers),
         "--output_json", str(run_dir / "val_metrics.json"),
     ] + common_args
@@ -85,6 +87,7 @@ def visualize_one_run(
     model: str,
     batch_size: int,
     num_workers: int,
+    dropout: float,
 ):
     checkpoint = run_dir / "model_best.pth"
     if not checkpoint.exists():
@@ -98,6 +101,7 @@ def visualize_one_run(
         "--model", model,
         "--checkpoint", str(checkpoint),
         "--batch_size", str(batch_size),
+        "--dropout", str(dropout),
         "--num_workers", str(num_workers),
         "--output_png", str(run_dir / "val_errors.png"),
     ] + common_args
@@ -113,6 +117,7 @@ def predict_one_run(
     batch_size: int,
     num_workers: int,
     output_csv: Path,
+    dropout: float,
 ):
     checkpoint = run_dir / "model_best.pth"
     if not checkpoint.exists():
@@ -126,6 +131,7 @@ def predict_one_run(
         "--model", model,
         "--checkpoint", str(checkpoint),
         "--batch_size", str(batch_size),
+        "--dropout", str(dropout),
         "--num_workers", str(num_workers),
         "--output_csv", str(output_csv),
     ] + common_args
@@ -156,7 +162,9 @@ def main():
     parser.add_argument("--optimizers", nargs="*", default=["adamw"])
     parser.add_argument("--schedulers", nargs="*", default=["plateau"])
     parser.add_argument("--epochs_list", nargs="*", type=int, default=[10, 15])
+    parser.add_argument("--dropouts", nargs="*", type=float, default=[0.2])
     parser.add_argument("--early_stop_patience", type=int, default=5)
+    parser.add_argument("--early_stop_min_delta", type=float, default=0.001)
 
     parser.add_argument("--train_subset", type=int, default=None)
     parser.add_argument("--val_subset", type=int, default=None)
@@ -184,9 +192,10 @@ def main():
         args.optimizers,
         args.schedulers,
         args.epochs_list,
+        args.dropouts
     )
 
-    for model, aug, lr, batch_size, optimizer, scheduler, epochs in grid:
+    for model, aug, lr, batch_size, optimizer, scheduler, epochs, dropout in grid:
         if model not in MODEL_CONFIGS:
             print(f"Skip unsupported model: {model}")
             continue
@@ -199,6 +208,7 @@ def main():
             f"_opt-{optimizer}"
             f"_sch-{scheduler}"
             f"_ep-{epochs}"
+            f"_do-{dropout}"
         )
 
         run_dir = output_dir / run_name
@@ -216,12 +226,14 @@ def main():
                 "--epochs", str(epochs),
                 "--batch_size", str(batch_size),
                 "--lr", str(lr),
+                "--dropout", str(dropout),
                 "--augmentation", aug,
                 "--optimizer", optimizer,
                 "--scheduler", scheduler,
                 "--num_workers", str(args.num_workers),
                 "--seed", str(args.seed),
                 "--early_stop_patience", str(args.early_stop_patience),
+                "--early_stop_min_delta", str(args.early_stop_min_delta),
                 "--output_dir", str(output_dir),
                 "--run_name", run_name,
             ]
@@ -241,6 +253,7 @@ def main():
                     "augmentation": aug,
                     "lr": lr,
                     "batch_size": batch_size,
+                    "dropout": dropout,
                     "optimizer": optimizer,
                     "scheduler": scheduler,
                     "epochs": epochs,
@@ -259,6 +272,7 @@ def main():
                     model=model,
                     batch_size=batch_size,
                     num_workers=args.num_workers,
+                    dropout=dropout,
                 )
 
         val_metrics = load_json(val_metrics_path)
@@ -269,6 +283,7 @@ def main():
             "augmentation": aug,
             "lr": lr,
             "batch_size": batch_size,
+            "dropout": dropout,
             "optimizer": optimizer,
             "scheduler": scheduler,
             "epochs": epochs,
@@ -308,6 +323,7 @@ def main():
             "best_val_acc",
             "lastEpoch_val_acc",
             "epochs_nums",
+            "dropout",
             "total_time_sec",
             "device",
             "eval_accuracy",
@@ -347,6 +363,7 @@ def main():
                 model=r["model"],
                 batch_size=r["batch_size"],
                 num_workers=args.num_workers,
+                dropout=r["dropout"],
             )
 
     submission_generated = False
@@ -359,6 +376,7 @@ def main():
             batch_size=best_overall["batch_size"],
             num_workers=args.num_workers,
             output_csv=best_submission_path,
+            dropout=best_overall["dropout"],
         )
 
     final_report = {

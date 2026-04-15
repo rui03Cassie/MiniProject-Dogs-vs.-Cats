@@ -119,7 +119,7 @@ def main():
     parser.add_argument("--val_subset", type=int, default=None)
     # model
     parser.add_argument("--model", type=str, default="cnn")
-    parser.add_argument("--dropout", type=float, default=0.3)
+    parser.add_argument("--dropout", type=float, default=0.2)
     parser.add_argument("--pretrained", action="store_true")
     parser.add_argument("--train_backbone", action="store_true")
     parser.add_argument("--unfreeze_layer4", action="store_true")
