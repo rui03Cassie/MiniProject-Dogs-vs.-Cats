@@ -1,43 +1,52 @@
-# Dataset
-datasets/
+# ── Datasets ──────────────────────────────────────────────────────────────────
 data/
+cifar10_data/
+datasets/
 dogs-vs-cats/
 
-# Images
-*.jpg
-*.jpeg
-*.png
-*.bmp
-*.webp
-
-# Models
-*.pth
+# ── Model weights ─────────────────────────────────────────────────────────────
+**/*.pth
 *.pt
 *.ckpt
 
-# Logs
-runs/
-logs/
-outputs/
+# ── Temporary / debug output runs ─────────────────────────────────────────────
+outputs/debug_run/
+outputs/resnet_run/
+outputs/cifar10/test_run/
+
+# ── Grid search per-run outputs (keep summary CSVs and JSONs, drop curves/weights)
+outputs/grid_search_fixed_ep50_bs128/*/
+
+# ── Other output dirs ─────────────────────────────────────────────────────────
 checkpoints/
+runs/
+
+# ── Slurm logs ────────────────────────────────────────────────────────────────
+logs/
 *.log
 
-# Python
+# ── Python cache ──────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
+*.pyd
+.Python
 
-# Env
+# ── Jupyter checkpoints ───────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Env ───────────────────────────────────────────────────────────────────────
 env/
 venv/
 .venv/
 
-# VSCode
+# ── OS / editor ───────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
 .vscode/
 
-# Mac
-.DS_Store
-
-# Archives
+# ── Archives ──────────────────────────────────────────────────────────────────
 *.zip
 *.tar
 *.gz
