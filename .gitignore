@@ -3,6 +3,10 @@ datasets/
 data/
 dogs-vs-cats/
 
+output_batch32/
+outputs/
+*.log
+
 # Images
 *.jpg
 *.jpeg

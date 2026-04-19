@@ -144,7 +144,7 @@ def main():
     torch.manual_seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
 
-    # 训练设备
+    # Training device
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
         device = torch.device("cuda")
@@ -182,7 +182,8 @@ def main():
     model = build_model(args.model, 2, args.dropout, args.pretrained, args.train_backbone, args.unfreeze_layer4).to(device)
     loss_fn = nn.CrossEntropyLoss(label_smoothing=0.05)
     params = [param for param in model.parameters() if param.requires_grad]
-    # 优化器
+
+    # Optimizer
     if args.optimizer.lower() == "adam":
         optimizer = torch.optim.Adam(params, lr=args.lr, weight_decay=args.weight_decay)
     elif args.optimizer.lower() == "adamw":
@@ -191,7 +192,8 @@ def main():
         optimizer = torch.optim.SGD(params, lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
     else:
         raise ValueError(f"Unsupported optimizer: {args.optimizer}")
-    # 调度器
+    
+    # Scheduler
     if args.scheduler.lower() == "none":
         scheduler = None
     elif args.scheduler.lower() == "step":
@@ -210,8 +212,8 @@ def main():
     best_epoch = -1
     best_state = copy.deepcopy(model.state_dict())
     stopper = EarlyStopping(patience=args.early_stop_patience, mode="min", min_delta=args.early_stop_min_delta)
-    start_time = time.time() # 记录时间
-    # 开始训练
+    start_time = time.time() # trainig time recorded
+    # Start Training
     best_val_acc = -1.0
     best_epoch = -1
     for epoch in range(1, args.epochs + 1):

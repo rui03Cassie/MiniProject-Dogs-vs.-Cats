@@ -88,7 +88,7 @@ class ResNet(nn.Module):
         else:
             raise ValueError(f"Unsupported backbone_name: {backbone_name}")
 
-        # 不能开train_backbone的同时开layer4
+        # Unfreeze either train_backbone or layer4, not both
         if train_backbone and unfreeze_layer4:
             raise ValueError("Choose either train_backbone or unfreeze_layer4, not both.")
         

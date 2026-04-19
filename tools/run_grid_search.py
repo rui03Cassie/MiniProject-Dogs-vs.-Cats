@@ -165,6 +165,7 @@ def main():
     parser.add_argument("--dropouts", nargs="*", type=float, default=[0.2])
     parser.add_argument("--early_stop_patience", type=int, default=5)
     parser.add_argument("--early_stop_min_delta", type=float, default=0.001)
+    parser.add_argument("--use_amp", action="store_true", help="Use Automatic Mixed Precision")
 
     parser.add_argument("--train_subset", type=int, default=None)
     parser.add_argument("--val_subset", type=int, default=None)
@@ -234,9 +235,12 @@ def main():
                 "--seed", str(args.seed),
                 "--early_stop_patience", str(args.early_stop_patience),
                 "--early_stop_min_delta", str(args.early_stop_min_delta),
+                "--use_amp",
                 "--output_dir", str(output_dir),
                 "--run_name", run_name,
             ]
+            if args.use_amp:
+                cmd.append("--use_amp")
 
             if args.train_subset is not None:
                 cmd += ["--train_subset", str(args.train_subset)]
