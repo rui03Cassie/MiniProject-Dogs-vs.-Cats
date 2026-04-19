@@ -1,7 +1,7 @@
 # Dogs vs. Cats Classification Training part
-This repository is used for constructing, training, and generating prediction results for the three cat-dog classifier. 
+This repository is used for constructing, training, and generating prediction results for the three cat-dog classification models. 
 
-### scope:
+Scope:
 - supervised image classification on dog/cat images
 - training on the training split and validation on the validation split
 - prediction on the test split
@@ -42,7 +42,7 @@ print(torch.cuda.get_device_name(0))  # e.g. NVIDIA A100
 
 ---
 
-## 2. Data Prepartion
+## 2. Data Preparation
 ### 2.1 Expected Input
 The training pipeline assumes the dataset has already been organized as:
 
@@ -61,14 +61,14 @@ data/
 ```
 
 ### 2.2 If the original dataset is still flat:
-run:
+Run:
 
 ```bash
-python split_dataset.py \
-  --root_dir ./dogs-vs-cats \
-  --val_ratio 0.2 \
-  --seed 42 \
-  --copy \
+python utils/split_dataset.py `
+  --root_dir ./dogs-vs-cats `
+  --val_ratio 0.2 `
+  --seed 42 `
+  --copy `
   --force_clean
 ```
 
@@ -95,6 +95,7 @@ Support:
 - Various optimizers, augmentation settings, and learning rate schedulers
 - Automatic early stopping
 - Automatic generation of loss and accuracy curves
+- Reproducible by fixing the random seed
 
 #### Input
 - A pre-split dataset directory containing `train/`, `val/`, and `test/`
@@ -127,60 +128,60 @@ outputs/
 #### Notes
 - `model_best.pth` stores the checkpoint with the best validation accuracy.
 - `summary.json` records the best epoch, best validation accuracy, last validation accuracy, device, runtime, and configuration.
-- Early stopping is triggered based on **validation loss**, while the best checkpoint is saved according to **validation accuracy**.
-- The loss function is `CrossEntropyLoss(label_smoothing=0.05)`.
+- Early stopping is triggered based on **validation loss**, while the best model checkpoint is saved according to **validation accuracy**.
+- The loss function is `CrossEntropyLoss(label_smoothing=0.05)`, where label_smoothing helps to improve generalization and reduce overconfidence in the predictions.
 
 #### How to Run
 
 ##### Train a custom CNN
 ```bash
-python train.py \
-  --data_root ./data/datasets \
-  --model cnn \
-  --epochs 15 \
-  --batch_size 32 \
-  --lr 0.001 \
-  --augmentation light \
-  --optimizer adam \
-  --scheduler plateau \
-  --dropout 0.3 \
-  --output_dir outputs \
+python train.py `
+  --data_root ./data/datasets `
+  --model cnn `
+  --epochs 10 `
+  --batch_size 32 `
+  --lr 0.001 `
+  --augmentation light `
+  --optimizer adam `
+  --scheduler plateau `
+  --dropout 0.3 `
+  --output_dir outputs `
   --run_name cnn_run
 ```
 
 ##### Train ResNet18 with transfer learning
 ```bash
-python train.py \
-  --data_root ./data/datasets \
-  --model resnet \
-  --pretrained \
-  --unfreeze_layer4 \
-  --epochs 15 \
-  --batch_size 32 \
-  --lr 0.0001 \
-  --augmentation strong \
-  --optimizer adamw \
-  --scheduler plateau \
-  --dropout 0.3 \
-  --output_dir outputs \
+python train.py `
+  --data_root ./data/datasets `
+  --model resnet `
+  --pretrained `
+  --unfreeze_layer4 `
+  --epochs 10 `
+  --batch_size 32 `
+  --lr 0.0001 `
+  --augmentation strong `
+  --optimizer adamw `
+  --scheduler plateau `
+  --dropout 0.3 `
+  --output_dir outputs `
   --run_name resnet18_run
 ```
 
 ##### Train ResNet34 with transfer learning
 ```bash
-python train.py \
-  --data_root ./data/datasets \
-  --model resnet34 \
-  --pretrained \
-  --unfreeze_layer4 \
-  --epochs 15 \
-  --batch_size 32 \
-  --lr 0.0001 \
-  --augmentation strong \
-  --optimizer adamw \
-  --scheduler cosine \
-  --dropout 0.3 \
-  --output_dir outputs \
+python train.py `
+  --data_root ./data/datasets `
+  --model resnet34 `
+  --pretrained `
+  --unfreeze_layer4 `
+  --epochs 10 `
+  --batch_size 32 `
+  --lr 0.0001 `
+  --augmentation strong `
+  --optimizer adamw `
+  --scheduler cosine `
+  --dropout 0.3 `
+  --output_dir outputs `
   --run_name resnet34_run
 ```
 
@@ -201,7 +202,7 @@ Support:
 #### Input
 - Model type:
   - `cnn`
-  - `resnet (refer to resnet18)`
+  - `resnet (refers to resnet18)`
   - `resnet34`
 - Number of classes
 - Dropout rate
@@ -212,12 +213,10 @@ Support:
 #### Output
 Returns a PyTorch model instance that can be used directly in training or inference:
 
-```bash
-models.py
-├── CNN
-├── ResNet
-└── build_model(...)
-```
+Main models and functions:
+- `CNN`
+- `ResNet`
+- `build_model(model_name, num_classes, dropout, pretrained, train_backbone, unfreeze_layer4)`
 
 #### Models Used
 
@@ -247,7 +246,7 @@ A transfer learning architecture based on pretrained torchvision ResNet backbone
   - `Linear(256 → 2)`
 
 #### Notes
-- By default, all backbone parameters are frozen..
+- By default, all backbone parameters are frozen.
 - You can then choose one of the following fine-tuning strategies:
   - train the full backbone with `train_backbone=True`, or
   - unfreeze only `layer4` with `unfreeze_layer4=True`
@@ -282,7 +281,7 @@ A CSV file for submission:
 ```bash
 submission.csv
 ├── id
-└── label
+└── label (0 = cat, 1 = dog)
 ```
 
 Example output:
@@ -296,7 +295,7 @@ outputs/
 - The script reconstructs the same model architecture used during training.
 - It loads the trained checkpoint and performs deterministic inference on the test set.
 - Predictions are sorted by image ID before saving.
-- Label mappping:
+- Label mapping:
   - `0 = cat`
   - `1 = dog`
 
@@ -304,38 +303,38 @@ outputs/
 
 ##### Generate submission with CNN
 ```bash
-python predict.py \
-  --data_root ./data/datasets \
-  --model cnn \
-  --checkpoint outputs/cnn_run/model_best.pth \
-  --batch_size 32 \
-  --dropout 0.3 \
+python predict.py `
+  --data_root ./data/datasets `
+  --model cnn `
+  --checkpoint outputs/cnn_run/model_best.pth `
+  --batch_size 32 `
+  --dropout 0.3 `
   --output_csv outputs/cnn_submission.csv
 ```
 
 ##### Generate submission with ResNet18
 ```bash
-python predict.py \
-  --data_root ./data/datasets \
-  --model resnet \
-  --checkpoint outputs/resnet18_run/model_best.pth \
-  --batch_size 32 \
-  --dropout 0.3 \
-  --pretrained \
-  --unfreeze_layer4 \
+python predict.py `
+  --data_root ./data/datasets `
+  --model resnet `
+  --checkpoint outputs/resnet18_run/model_best.pth `
+  --batch_size 32 `
+  --dropout 0.3 `
+  --pretrained `
+  --unfreeze_layer4 `
   --output_csv outputs/resnet18_submission.csv
 ```
 
 ##### Generate submission with ResNet34
 ```bash
-python predict.py \
-  --data_root ./data/datasets \
-  --model resnet34 \
-  --checkpoint outputs/resnet34_run/model_best.pth \
-  --batch_size 32 \
-  --dropout 0.3 \
-  --pretrained \
-  --unfreeze_layer4 \
+python predict.py `
+  --data_root ./data/datasets `
+  --model resnet34 `
+  --checkpoint outputs/resnet34_run/model_best.pth `
+  --batch_size 32 `
+  --dropout 0.3 `
+  --pretrained `
+  --unfreeze_layer4 `
   --output_csv outputs/resnet34_submission.csv
 ```
 
@@ -346,23 +345,23 @@ python predict.py \
 ### 4.1. Debug
 
 ```bash
-python train.py \
-  --data_root ./data/datasets \
-  --model cnn \
-  --epochs 2 \
-  --batch_size 16 \
-  --lr 0.0001 \
-  --augmentation light \
-  --train_subset 200 \
-  --val_subset 100 \
-  --dropout 0.3 \
-  --early_stop_patience 3 \
-  --early_stop_min_delta 0.001 \
-  --output_dir outputs \
+python train.py `
+  --data_root ./data/datasets `
+  --model cnn `
+  --epochs 2 `
+  --batch_size 16 `
+  --lr 0.0001 `
+  --augmentation light `
+  --train_subset 200 `
+  --val_subset 100 `
+  --dropout 0.3 `
+  --early_stop_patience 3 `
+  --early_stop_min_delta 0.0005 `
+  --output_dir outputs `
   --run_name debug_run
 ```
 
-### 4.2 Formal Training
+### 4.2. Formal Training
 Augmentation is set to light as it is the most reasonable compromise.
 Dropout rate is set to `0.3`, as a moderate level of regularization is generally helpful for improving generalization. Although the 50-epoch dropout comparison in the report is only conducted on ResNet34, the final runs of the ResNet-based models also suggest that an appropriate amount of regularization is beneficial.
 Early stopping patience is set to `3` for short training runs (e.g., 10 epochs), but set to `7` for longer runs (e.g., 50 epochs in grid search).
@@ -387,7 +386,7 @@ python train.py `
   --run_name cnn_run1
 ```
 
-##### Train ResNet18
+#### Train ResNet18
 
 ```bash
 python train.py `
@@ -447,48 +446,48 @@ python .\tools\run_grid_search.py `
   --early_stop_min_delta 0.0005
 ```
 
-### 3. Compare three models and corresponding settings
+### 4.3. Compare three models and corresponding settings
 
 Check outputs/grid_search_fixed_ep50/grid_results.csv or outputs/grid_search_fixed_ep50/final_report.json
 
 -> Choose the configuration with the highest validation accuracy (best_val_acc)
 
-### 4. Generate the Final Submission file (Only once)
- Utilize the best corresponding (model type, augmentation, learning rate, batch size, optimizer, scheduler, and epochs) to generate the final submission.csv file.
+### 4.4. Generate the Final Submission file (Only once)
+ Use the best-performing configuration (model type, augmentation, learning rate, batch size, optimizer, scheduler, and epochs) to generate the final submission.csv file.
 
-#### If ResNet34 is the best (most of the case)：
+#### If ResNet34 is the best (most of the case):
 
 ```bash
-python predict.py \
-  --data_root ./data/datasets \
-  --model resnet34 \
-  --checkpoint outputs/resnet34_run/model_best.pth \
-  --pretrained \
-  --unfreeze_layer4 \
-  --dropout 0.3 \
+python predict.py `
+  --data_root ./data/datasets `
+  --model resnet34 `
+  --checkpoint outputs/resnet34_run/model_best.pth `
+  --pretrained `
+  --unfreeze_layer4 `
+  --dropout 0.3 `
   --output_csv submission.csv
 ```
 
-#### If ResNet18 is the best：
+#### If ResNet18 is the best:
 
 ```bash
-python predict.py \
-  --data_root ./data/datasets \
-  --model resnet \
-  --checkpoint outputs/resnet18_run/model_best.pth \
-  --pretrained \
-  --unfreeze_layer4 \
-  --dropout 0.3 \
+python predict.py `
+  --data_root ./data/datasets `
+  --model resnet `
+  --checkpoint outputs/resnet18_run/model_best.pth `
+  --pretrained `
+  --unfreeze_layer4 `
+  --dropout 0.3 `
   --output_csv submission.csv
 ```
 
-#### If CNN is the best：
+#### If CNN is the best:
 
 ```bash
-python predict.py \
-  --data_root ./data/datasets \
-  --model cnn \
-  --checkpoint outputs/cnn_run1/model_best.pth \
-  --dropout 0.3 \
+python predict.py `
+  --data_root ./data/datasets `
+  --model cnn `
+  --checkpoint outputs/cnn_run1/model_best.pth `
+  --dropout 0.3 `
   --output_csv submission.csv
 ```
