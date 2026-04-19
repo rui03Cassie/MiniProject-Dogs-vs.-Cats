@@ -28,7 +28,7 @@ The current codebase supports both a **custom CNN baseline** and **transfer-lear
 pip install torch torchvision numpy pandas matplotlib tqdm pillow scikit-learn
 ```
 
-If you use NVIDIA GPU, install the CUDA-enabled PyTorch build that matches your local CUDA version.
+If a NVIDIA GPU is used, install the CUDA-enabled PyTorch build that matches the local CUDA version.
 
 **Verify GPU**
 
@@ -197,7 +197,7 @@ Support:
 - ResNet34 transfer learning
 - Adjustable dropout in the classifier head
 - Flexible freezing / unfreezing of pretrained backbones
-- Unified `build_model(...)` function
+- Unified `build_model()` function
 
 #### Input
 - Model type:
