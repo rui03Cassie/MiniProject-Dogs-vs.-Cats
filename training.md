@@ -8,7 +8,7 @@ Scope:
 - exporting the final test predictions into `submission.csv`
 - comparing different models and training settings
 
-The current codebase supports both a **custom CNN baseline** and **transfer-learning-based residual networks(ResNet18 and ResNet34)**
+The current codebase supports both a **custom CNN baseline** and **transfer-learning-based residual networks (ResNet18 and ResNet34)**
 
 ## 1. Environment Setup
 
