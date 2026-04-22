@@ -3,10 +3,11 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 from torchvision import models
+from torchvision.models import ResNet18_Weights, ResNet34_Weights
 
 
 class CNN(nn.Module):
-    def __init__(self, num_classes=2, dropout=0.3):
+    def __init__(self, num_classes=2, dropout=0.2):
         super().__init__()
         self.features = nn.Sequential(
             nn.Conv2d(3, 32, kernel_size=3, padding=1, bias=False),
@@ -75,10 +76,19 @@ class CNN(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, num_classes=2, dropout=0.2, pretrained=True, train_backbone=False, unfreeze_layer4=True):
+    def __init__(self, num_classes=2, dropout=0.2, pretrained=True, train_backbone=False, unfreeze_layer4=True, backbone_name="resnet18"):
         super().__init__()
-        model = models.resnet18(pretrained=pretrained)
-        # 不能开train_backbone的同时开layer4
+
+        if backbone_name == "resnet18":
+            weights = ResNet18_Weights.DEFAULT if pretrained else None
+            model = models.resnet18(weights=weights)
+        elif backbone_name == "resnet34":
+            weights = ResNet34_Weights.DEFAULT if pretrained else None
+            model = models.resnet34(weights=weights)
+        else:
+            raise ValueError(f"Unsupported backbone_name: {backbone_name}")
+
+        # Unfreeze either train_backbone or layer4, not both
         if train_backbone and unfreeze_layer4:
             raise ValueError("Choose either train_backbone or unfreeze_layer4, not both.")
         
@@ -107,23 +117,28 @@ class ResNet(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         return self.model(x)
 
-def build_model(model_name, num_classes, dropout=0.3, pretrained=False, train_backbone=False, unfreeze_layer4=False):
+def build_model(model_name, num_classes, dropout=0.2, pretrained=False, train_backbone=False, unfreeze_layer4=False):
     model_name = model_name.lower()
     if model_name == "cnn":
         return CNN(num_classes, dropout)
     elif model_name == "resnet":
-        return ResNet(num_classes, dropout, pretrained, train_backbone, unfreeze_layer4)
+        return ResNet(num_classes, dropout, pretrained, train_backbone, unfreeze_layer4, "resnet18")
+    elif model_name == "resnet34":
+        return ResNet(num_classes, dropout, pretrained, train_backbone, unfreeze_layer4, "resnet34")
     raise ValueError(f"Unknown model: {model_name}")
 
 
 def main():
-    cnn = build_model("CNN")
-    resNet = build_model("ResNet")
+    cnn = build_model("cnn", 2)
+    resnet = build_model("resnet", 2)
+    resnet34 = build_model("resnet34", 2)
 
     print("CNN total params:", sum(p.numel() for p in cnn.parameters()))
     print("CNN trainable params:", sum(p.numel() for p in cnn.parameters() if p.requires_grad))
-    print("ResNet total params:", sum(p.numel() for p in resNet.parameters()))
-    print("ResNet trainable params:", sum(p.numel() for p in resNet.parameters() if p.requires_grad))
+    print("ResNet total params:", sum(p.numel() for p in resnet.parameters()))
+    print("ResNet trainable params:", sum(p.numel() for p in resnet.parameters() if p.requires_grad))
+    print("ResNet34 total params:", sum(p.numel() for p in resnet34.parameters()))
+    print("ResNet34 trainable params:", sum(p.numel() for p in resnet34.parameters() if p.requires_grad))
 
 if __name__ == "__main__":
     main()

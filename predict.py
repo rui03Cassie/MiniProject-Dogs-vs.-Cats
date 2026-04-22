@@ -31,13 +31,13 @@ def main():
     parser = argparse.ArgumentParser(description="Generate submission.csv for Dogs vs Cats")
     parser.add_argument("--data_root", type=str, required=True, help="Path to data/ directory")
     parser.add_argument("--checkpoint", type=str, required=True, help="Path to best checkpoint")
-    parser.add_argument("--model", type=str, required=True, choices=["cnn", "resnet"])
+    parser.add_argument("--model", type=str, required=True, choices=["cnn", "resnet", "resnet34"])
 
     parser.add_argument("--img_size", type=int, default=224)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--num_workers", type=int, default=4)
     parser.add_argument("--normalize_mode", type=str, default="imagenet", choices=["imagenet", "none"])
-    parser.add_argument("--dropout", type=float, default=0.3)
+    parser.add_argument("--dropout", type=float, default=0.2)
     parser.add_argument("--pretrained", action="store_true")
     parser.add_argument("--train_backbone", action="store_true")
     parser.add_argument("--unfreeze_layer4", action="store_true")
@@ -51,7 +51,7 @@ def main():
     torch.manual_seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
 
-    # 训练设备
+    # device
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
     if torch.cuda.is_available():
