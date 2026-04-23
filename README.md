@@ -11,8 +11,8 @@ This repository contains four branches:
 | Branch | Description |
 |--------|-------------|
 | `main` | Merged codebase |
-| `dev_A` | Model definition, training pipeline, grid search |
-| `dev_B` | Data loading, preprocessing, augmentation, prediction |
+| `dev_A` | Model definition, training pipeline, prediction |
+| `dev_B` | Data loading, preprocessing, augmentation, grid search |
 | `dev_C` | CIFAR-10 extension, class imbalance handling, case study |
 
 Each branch contains its own README with detailed usage instructions:
@@ -170,6 +170,6 @@ Full grid search results: `outputs/grid_search_fixed_ep50_bs128/grid_results.csv
 
 | Member | Branch | Responsibilities |
 |--------|--------|-----------------|
-| Mao Yuhui | `dev_A` | Model definition, training pipeline, grid search |
-| Wei Zihan | `dev_B` | Data loading, preprocessing, augmentation, prediction |
+| Wei Zishan | `dev_A` | Model definition, training pipeline, prediction |
+| Mao Yuhui  | `dev_B` | Data loading, preprocessing, augmentation, grid search |
 | Chen Lei | `dev_C` | CIFAR-10 extension, imbalance handling, case study |
