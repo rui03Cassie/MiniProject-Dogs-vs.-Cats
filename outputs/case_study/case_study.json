@@ -1,0 +1,315 @@
+{
+  "overall_accuracy": 0.9912,
+  "n_correct": 4956,
+  "n_wrong": 44,
+  "misclassified": [
+    {
+      "index": 560,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.12390.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.5668290257453918
+    },
+    {
+      "index": 4244,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.6528.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.6092652082443237
+    },
+    {
+      "index": 1471,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.5269.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.6604081988334656
+    },
+    {
+      "index": 2461,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.9836.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.6616625189781189
+    },
+    {
+      "index": 3985,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.5336.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.7432186603546143
+    },
+    {
+      "index": 129,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.10539.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.7470056414604187
+    },
+    {
+      "index": 4362,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.7076.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.7844865918159485
+    },
+    {
+      "index": 1079,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.3535.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.8063846826553345
+    },
+    {
+      "index": 991,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.3105.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.8065902590751648
+    },
+    {
+      "index": 2612,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.10524.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.8220037817955017
+    },
+    {
+      "index": 954,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.2939.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.850624680519104
+    },
+    {
+      "index": 4006,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.545.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.8834749460220337
+    },
+    {
+      "index": 4614,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.8267.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.8898155689239502
+    },
+    {
+      "index": 3208,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.1838.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.890302300453186
+    },
+    {
+      "index": 689,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.1772.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.895133912563324
+    },
+    {
+      "index": 1663,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.6084.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9097689390182495
+    },
+    {
+      "index": 2690,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.10842.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9376225471496582
+    },
+    {
+      "index": 1821,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.6734.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9551816582679749
+    },
+    {
+      "index": 1880,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.704.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.976382315158844
+    },
+    {
+      "index": 3630,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.3753.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9808037877082825
+    },
+    {
+      "index": 3745,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.4198.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9868897199630737
+    },
+    {
+      "index": 4498,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.7729.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9879074692726135
+    },
+    {
+      "index": 2370,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.9351.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9921175837516785
+    },
+    {
+      "index": 933,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.2873.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.992672324180603
+    },
+    {
+      "index": 1134,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.3789.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9939360022544861
+    },
+    {
+      "index": 3073,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.1254.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9940577745437622
+    },
+    {
+      "index": 367,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.11544.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9944830536842346
+    },
+    {
+      "index": 4972,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.990.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9948666095733643
+    },
+    {
+      "index": 1755,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.6442.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9949178695678711
+    },
+    {
+      "index": 2351,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.9277.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.998504638671875
+    },
+    {
+      "index": 1527,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.5482.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9986792206764221
+    },
+    {
+      "index": 3365,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.254.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9991503953933716
+    },
+    {
+      "index": 3867,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.4808.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9993985891342163
+    },
+    {
+      "index": 4416,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.7332.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9994469285011292
+    },
+    {
+      "index": 207,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.10863.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9996224641799927
+    },
+    {
+      "index": 4535,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.7913.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9996806383132935
+    },
+    {
+      "index": 1959,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.738.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.999921441078186
+    },
+    {
+      "index": 4233,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/dog/dog.6489.jpg",
+      "true_label": "dog",
+      "pred_label": "cat",
+      "confidence": 0.9999241828918457
+    },
+    {
+      "index": 2474,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.9882.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.999975323677063
+    },
+    {
+      "index": 940,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.2893.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9999885559082031
+    },
+    {
+      "index": 370,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.11565.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9999934434890747
+    },
+    {
+      "index": 1365,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.4833.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.9999951124191284
+    },
+    {
+      "index": 2478,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.9897.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 0.999997615814209
+    },
+    {
+      "index": 2069,
+      "path": "/projects/projectsLC/MiniProject-Dogs-vs.-Cats/data/datasets/val/cat/cat.7920.jpg",
+      "true_label": "cat",
+      "pred_label": "dog",
+      "confidence": 1.0
+    }
+  ]
+}

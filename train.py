@@ -161,8 +161,8 @@ def main():
         run_name = f"{args.model}_lr{args.lr}_bs{args.batch_size}_aug{args.augmentation}"
     else:
         run_name = args.run_name
-    save_dir = Path(args.output_dir) / run_name
-    save_dir.mkdir(parents=True, exist_ok=True)
+    save_dir = os.path.join(args.output_dir, run_name)
+    Path(save_dir).mkdir(parents=True, exist_ok=True)
 
     config = DatasetConfig(
         root_dir=args.data_root,
@@ -241,8 +241,8 @@ def main():
             best_val_acc = val_acc
             best_epoch = epoch
             best_state = copy.deepcopy(model.state_dict())
-            torch.save(best_state, save_dir / "model_best.pth")
-            print(f"Saved best model to: {save_dir / 'model_best.pth'}")
+            torch.save(best_state, Path(save_dir) / "model_best.pth")
+            print(f"Saved best model to: {Path(save_dir) / 'model_best.pth'}")
 
         if stopper.step(val_loss):
             print(f"Early stopping triggered at epoch {epoch}.")
@@ -262,7 +262,7 @@ def main():
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.3)
     plt.tight_layout()
-    plt.savefig(save_dir / f"loss_curve_{tag}.png", dpi=200)
+    plt.savefig(Path(save_dir) / "loss_curve.png", dpi=200)
     plt.close()
 
     plt.figure(figsize=(8, 5))
@@ -274,7 +274,7 @@ def main():
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.3)
     plt.tight_layout()
-    plt.savefig(save_dir / f"acc_curve_{tag}.png", dpi=200)
+    plt.savefig(Path(save_dir) / "acc_curve.png", dpi=200)
     plt.close()
 
     if len(history["val_acc"]) > 0:
@@ -293,7 +293,7 @@ def main():
         "config": vars(args),
         }
 
-    summary_path = save_dir / "summary.json"
+    summary_path = Path(save_dir) / "summary.json"
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
 

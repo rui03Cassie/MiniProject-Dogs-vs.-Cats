@@ -80,6 +80,7 @@ pip install torch torchvision numpy pandas matplotlib tqdm pillow scikit-learn
 ### Dogs vs. Cats
 
 **Train:**
+
 ```bash
 python train.py \
     --data_root ./data/datasets \
@@ -97,6 +98,7 @@ python train.py \
 ```
 
 **Predict:**
+
 ```bash
 python predict.py \
     --data_root ./data/datasets \
